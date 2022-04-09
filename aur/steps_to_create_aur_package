@@ -1,6 +1,7 @@
 Just clone the new repository with:
     git clone ssh://aur@aur.archlinux.org/new_pkg_name.git
 
+Create the .SRCINFO file before committing anything: with makepks --printsrcinfo > .SRCINFO
 Copy the validated .SRCINFO and PKGBUILD into the cloned repo
 
 Add, commit and push
