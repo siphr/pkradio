@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 def get_version():
-    return "0.1"
+    return "0.4"
 
 def get_media_player() -> str:
     import os
