@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 setup(
     name="pkradio",
     py_modules=['pkradio'],
-    version="0.2",
+    version="0.3",
     keywords=["pakistani", "urdu", "sindhi", "radio", "internet", "live"],
     description="Pakistani radio listener for a list stations, that'll hopefully keep growing.",
     long_description=open('README.md').read(),

@@ -5,13 +5,13 @@ def get_version():
 
 def get_media_player() -> str:
     import os
-    _desired_player = 'mpv'
+    _players = ['mpv', 'mplayer', 'vlc']
 
-    res = os.system(f'which {_desired_player}')
-    if res == 0: #its available
-        return 'mpv'
-    else:
-        raise Exception('This program relies on the MPV media player. Please ensure that it is installed. Alternatively you can try the linux package which takes care of all dependencies.')
+    for p in _players:
+        if (os.system(f'which {p}') == 0):
+            return p
+
+    raise Exception('This program relies on the MPV media player. Please ensure that it is installed. Alternatively you can try the Linux package which takes care of all dependencies.')
 
 def load_stations() -> dict:
     import os
@@ -23,9 +23,25 @@ def _list_stations(_stations):
     for (k,v) in _stations.items():
         print(f'\033[2m{k}\033[0m: {v}')
 
-def play_radio_uri(player: str, uri: str):
+def play_radio_uri(player: str, station_name: str):
     import os
-    #print(f'playing station: {uri}')
+    import json
+
+    #print(f'playing station: {station_name}')
+
+    print(os.path.dirname(__file__))
+    try:
+        _stations = json.load(open(f'{os.path.dirname(__file__)}/stations.json'))
+    except:
+        raise Exception('Cannot load stations.')
+
+    try:
+        uri:str = _stations[station_name]
+    except KeyError:
+        raise Exception(f'Unknown station {station_name}.')
+    except:
+        raise Exception('Unknown error.')
+
     res = os.system(f'{player} {uri}')
     if res != 0:
         raise Exception(f'There was an unknown problem playing {uri} with {player}. Maybe the player does not support streaming?')
@@ -55,12 +71,11 @@ def _main():
         _list_stations(_stations)
     else:
         if not args.station in _stations.keys():
-            raise Exception(f'Could not find "{args.station}" radio station. Please verify.')
+            raise Exception(f'Not a valid station. Use -l."{args.station}" radio station.')
 
-        _uri = _stations.get(args.station)
-        _player= get_media_player()
+        _player = get_media_player()
 
-        play_radio_uri(_player, _uri)
+        play_radio_uri(_player, args.station)
         
 
 if __name__ == '__main__':
